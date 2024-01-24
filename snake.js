@@ -7,16 +7,16 @@ let food = { x: 0, y: 0 };
 let direction = "right";
 
 function draw() {
-  // Clear the canvas
+  // die Seite leeren
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // Draw the snake
+  // zeichnen der Schlange
   ctx.fillStyle = "#F8F8FF";
   snake.forEach(segment => {
     ctx.fillRect(segment.x, segment.y, gridSize, gridSize);
   });
 
-  // Draw the food
+  // zeichnen des Essens
   ctx.fillStyle = "#FF0000";
   ctx.fillRect(food.x, food.y, gridSize, gridSize);
 }
@@ -25,19 +25,19 @@ function move() {
   let headX = snake[0].x;
   let headY = snake[0].y;
 
-  // Move the snake based on the current direction
+  // Bewegung der Schlange
   if (direction === "right") headX += gridSize;
   else if (direction === "left") headX -= gridSize;
   else if (direction === "up") headY -= gridSize;
   else if (direction === "down") headY += gridSize;
 
-  // Check for collisions with the walls
+  // Kollision mit der Wand
   if (headX < 0 || headX >= canvas.width || headY < 0 || headY >= canvas.height) {
     gameOver();
     return;
   }
 
-  // Check for collisions with itself
+  // Kollision mit sich selber
   for (let i = 1; i < snake.length; i++) {
     if (headX === snake[i].x && headY === snake[i].y) {
       gameOver();
@@ -45,21 +45,21 @@ function move() {
     }
   }
 
-  // Check for collisions with the food
+  // Kollision mit dem Essen
   if (headX === food.x && headY === food.y) {
     // Generate new food
     food.x = Math.floor(Math.random() * (canvas.width / gridSize)) * gridSize;
     food.y = Math.floor(Math.random() * (canvas.height / gridSize)) * gridSize;
 
-    // Increase the snake length
+    // Verlängerung der Schlange
     snake.unshift({ x: headX, y: headY });
   } else {
-    // Move the snake by adding a new head and removing the tail
     snake.unshift({ x: headX, y: headY });
     snake.pop();
   }
 }
 
+	// Game Over
 function gameOver() {
   alert("Uh-Oh!");
   snake = [{ x: 0, y: 0 }];
@@ -67,7 +67,7 @@ function gameOver() {
 }
 
 function keyDownHandler(event) {
-  // Change direction based on wasd input
+  // wasd input
   if (event.key === "d" && direction !== "left") {
     direction = "right";
   } else if (event.key === "a" && direction !== "right") {
@@ -79,12 +79,12 @@ function keyDownHandler(event) {
   }
 }
 
-// Set up the initial state
+// Anfangszustand
 window.addEventListener("keydown", keyDownHandler);
 food.x = Math.floor(Math.random() * (canvas.width / gridSize)) * gridSize;
 food.y = Math.floor(Math.random() * (canvas.height / gridSize)) * gridSize;
 
-// Main game loop
+// spiel loop
 setInterval(() => {
   move();
   draw();
